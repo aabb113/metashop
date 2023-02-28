@@ -71,6 +71,7 @@ constructor(selector){
             const loader=new GLTFLoader().setPath('files/gltf/')
             loader.load(modelName,(gltf)=>{
             console.log(gltf)
+            this.model && this.model.removeFromParent();
             this.model=gltf.scene.children[0]
             if("bag2.glb"==modelName&&!this.panzi){
                 this.panzi = gltf.scene.children[5];

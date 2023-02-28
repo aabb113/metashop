@@ -27,8 +27,8 @@
         <template #icon>
             <setting-outlined />
         </template>
-        <template #title>cart</template>
-        <a-menu-item-group title="Item cart">
+        <template #title>购物车</template>
+        <a-menu-item-group title="购物车">
             <a-menu-item v-for="item,index in store.state.buycarts">
                 <div class="prod-item">
                     <div class="left">
@@ -49,7 +49,6 @@
                     </div>
                 </div>
             </a-menu-item>
-            <a-menu-item key="setting:2">Option 2</a-menu-item>
         </a-menu-item-group>
         </a-sub-menu>
         <a-menu-item key="alipay">
@@ -95,7 +94,6 @@ const onSearch=()=>{}
     margin-right: 40px;
     img{
         height: 30px;
-
     }
 }
 

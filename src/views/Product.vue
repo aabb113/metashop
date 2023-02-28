@@ -2,7 +2,7 @@
   <div class="loading" v-show="data.isLoading">
     <Loading></Loading>
   </div>
-  <div class="product" v-show="!data.isLoading">
+  <div class="product" v-show="!data.isLoading" id="product">
     <div class="product-list" :class="{hidden:store.state.isFullscreen}">
         <h1><SketchOutlined></SketchOutlined>产品推荐</h1>
         <div class="products">
@@ -15,7 +15,7 @@
             <div class="img">
                 <img :src="item.imgsrc" alt="">
             </div>
-            <a-button type="primary" block @click.stop="addBuycart(item)">jiaru</a-button > 
+            <a-button type="primary" block @click.stop="addBuycart(item)">加入购物车</a-button > 
             </div>
         </div>
     </div>
@@ -42,6 +42,7 @@ import { getProducts } from "../network/home";
 
 import Loading from "../components/loading.vue";
 import { SketchOutlined,RadarChartOutlined } from "@ant-design/icons-vue";
+import Base3d from "../utils/Base3d"
 const route=useRoute();
 const store=useStore();
 const data=reactive({
@@ -50,6 +51,7 @@ const data=reactive({
     scene:[],
     pIndex:0,
     sceneIndex:0,
+    base3d:{}
 })
 onMounted(async()=>{
     let result=await getProducts();
@@ -58,13 +60,16 @@ onMounted(async()=>{
     data.products=result.list;
     data.scene=result.hdr;
     console.log(data.products);
+    data.base3d=new Base3d("#product")
 })
 
 function changeModel(item,index){
     data.pIndex=index
+    data.base3d.setModel(item.modelName);
 }
 function changeScene(item,index){
     data.sceneIndex=index
+    data.base3d.setEnvMap(item)
 }
 function addBuycart(prod){
     let product ={...prod,num :1}
@@ -137,7 +142,7 @@ window.addEventListener('mousewheel',(e)=>{
                         }
             }
             img{
-                width: 190px;
+                width: 100px;
             }
             .product-title{
                 padding: 0 20px;
@@ -175,7 +180,8 @@ window.addEventListener('mousewheel',(e)=>{
        
         img{
             width: 250px;
-            border-radius: 10px;
+            height: 90px;
+            border-radius: 5px;
             box-shadow: 5px 5px 10px #666;
             transition: all 0.3s;
             &.active{

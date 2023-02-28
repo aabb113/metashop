@@ -1,35 +1,116 @@
 <template>
   <div class="homeswiper">
-    <a-carousel autoplay>
+    <div class="swiperBg" :style="{ backgroundColor: data.bgColor }"></div>
+    <a-carousel arrows autoplay :beforeChange="changeFn">
     <template #prevArrow>
       <div class="custom-slick-arrow" style="left: 10px; z-index: 1">
         <left-circle-outlined />
       </div>
     </template>
     <template #nextArrow>
-      <div class="custom-slick-arrow" style="right: 10px">
-        <right-circle-outlined />
+        <div class="custom-slick-arrow" style="right: 10px">
+          <right-circle-outlined />
+        </div>
+      </template>
+      <div class="swiper-item" v-for="(item, i) in props.banner">
+        <div class="swiper-box">
+          <div class="swiper-left">
+            <h3 :style="{ color: item.text_color }">
+              {{ item.desktop_sub_title || item.sub_title }}
+            </h3>
+            <h1 :style="{ color: item.text_color }">
+              {{ item.desktop_title || item.title }}
+            </h1>
+          </div>
+          <div class="banner-right">
+            <img
+              :src="`https://pixl.decathlon.com.cn/${item.picture_desktop}/banner.jpg`"
+              :alt="item.title"
+            />
+          </div>
+        </div>
       </div>
-    </template>
-    <div><h3>1</h3></div>
-    <div><h3>2</h3></div>
-    <div><h3>3</h3></div>
-    <div><h3>4</h3></div>
-  </a-carousel>
+    </a-carousel>
   </div>
 </template>
 
 <script setup>
+import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons-vue";
+import { reactive } from "vue";
+const props = defineProps({ banner: Array });
+const data = reactive({
+  bgColor: props.banner[0].bg_color,
+});
+console.log(props);
 
+function changeFn(from, to) {
+  //   console.log(to);
+  data.bgColor = props.banner[to].bg_color;
+}
+
+console.log(window.innerHeight)
 </script>
 
 <style lang="less" scoped>
+.swiperBg {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 500px;
+  background-color: orangered;
+  transform-origin: 0 0;
+  transform: skew(0, -8deg);    //倾斜
+  transition: all 0.5s;
+}
+.swiper-item {
+  height: 400px;
+  .swiper-box {
+    display: flex;
+    min-width: 1200px;
+    justify-content: center;
+    .swiper-left {
+      width: 340px;
+      padding-right: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      margin-top: 100px;
+      text-align: right;
+    }
+    h3 {
+      font-size: 30px;
+      font-weight: 900;
+      margin: 0;
+      line-height: 40px;
+    }
+    h1 {
+      font-size: 60px;
+      font-weight: 900;
+      margin: 0;
+      line-height: 70px;
+    }
 
+    .banner-right {
+      margin-top: 45px;
+      transform-origin: 0 100%;
+      transform: skew(0, -8deg);
+      overflow: hidden;
+      border-radius: 20px;
+      border-bottom-right-radius: 80px;
+      img {
+        height: 400px;
+        transform-origin: 0 100%;
+        transform: skew(0, 8deg);
+        border-radius: 20px;
+      }
+    }
+  }
+}
+/* For demo */
 .ant-carousel :deep(.slick-slide) {
   text-align: center;
-  height: 160px;
+  height: 400px;
   line-height: 160px;
-  background: #364d79;
   overflow: hidden;
 }
 
